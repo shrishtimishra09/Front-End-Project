@@ -1,5 +1,4 @@
 // Attach an event listener to the 'sub' element when clicked
-
 const inputClearer = () => {
   const hElement = document.getElementById("height");
   const wElement = document.getElementById("weight");
@@ -16,7 +15,7 @@ document.getElementById("sub").addEventListener("click", function () {
   let wVal = parseInt(w);
 
   if (h.length === 0 || w.length === 0) {
-    alert("Empty inputs detected! Plz enter both height and weight");
+    alert("Empty inputs detected! Please enter both height and weight");
     inputClearer();
     return;
   }
@@ -27,16 +26,16 @@ document.getElementById("sub").addEventListener("click", function () {
   }
 
   if (hVal < 0 || wVal < 0) {
-    alert("Negative Values found Enter valid inputs!");
+    alert("Negative values found! Enter valid inputs");
     inputClearer();
     return;
   }
 
   // Convert height to meters
-  h /= 100.0;
+  let heightM = hVal / 100.0;
 
   // Calculate BMI
-  let bmi = w / (h * h);
+  let bmi = wVal / (heightM * heightM);
 
   // Round BMI to two decimal places
   bmi = parseFloat(bmi).toFixed(2);
@@ -61,15 +60,18 @@ document.getElementById("sub").addEventListener("click", function () {
     data = "Please Enter a Valid Input";
   }
 
-  // Set the source attribute of the 'body' element to display the appropriate image
+  // Display images and result
   document.getElementById("body").setAttribute("src", img);
-
-  // Display the result and BMI information
   document.getElementById("res").innerHTML = ` ${data}.`;
-  document.getElementById(
-    "result"
-  ).innerHTML = `Your BMI is <strong>${bmi}</strong>.`;
-
-  // Show the 'info' card
+  document.getElementById("result").innerHTML = `Your BMI is <strong>${bmi}</strong>.`;
   document.getElementById("info").setAttribute("class", "card show");
+
+  // Extra conversions
+  const weightLbs = (wVal * 2.20462).toFixed(2); // kg → lbs
+  const heightFt = (hVal / 30.48).toFixed(2);    // cm → feet
+
+  // Show extra info
+  document.getElementById("weight-extra").innerHTML = `Weight: ${wVal} kg (${weightLbs} lbs)`;
+  document.getElementById("height-extra").innerHTML = `Height: ${hVal} cm (${heightM.toFixed(2)} m / ${heightFt} ft)`;
 });
+
