@@ -36,8 +36,6 @@ document.getElementById("sub").addEventListener("click", function () {
 
   // Calculate BMI
   let bmi = wVal / (heightM * heightM);
-
-  // Round BMI to two decimal places
   bmi = parseFloat(bmi).toFixed(2);
 
   let img;
