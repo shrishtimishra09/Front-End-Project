@@ -1,77 +1,66 @@
-// Attach an event listener to the 'sub' element when clicked
+// Function to clear inputs
 const inputClearer = () => {
-  const hElement = document.getElementById("height");
-  const wElement = document.getElementById("weight");
-  hElement.value = "";
-  wElement.value = "";
+  document.getElementById("height").value = "";
+  document.getElementById("weight").value = "";
 };
 
+// Event listener for the 'Get BMI' button
 document.getElementById("sub").addEventListener("click", function () {
-  // Get the height and weight values from the input fields
+  // Get values from input
   let h = document.getElementById("height").value;
   let w = document.getElementById("weight").value;
 
-  let hVal = parseInt(h);
-  let wVal = parseInt(w);
+  let hVal = parseFloat(h);
+  let wVal = parseFloat(w);
 
-  if (h.length === 0 || w.length === 0) {
-    alert("Empty inputs detected! Please enter both height and weight");
+  // Validation
+  if (!h || !w) {
+    alert("Empty inputs detected! Please enter both height and weight.");
     inputClearer();
     return;
   }
-  if (hVal === 0) {
-    alert("Zero height entered! Enter a valid value");
-    inputClearer();
-    return;
-  }
-
-  if (hVal < 0 || wVal < 0) {
-    alert("Negative values found! Enter valid inputs");
+  if (hVal <= 0 || wVal <= 0) {
+    alert("Please enter valid positive numbers for height and weight!");
     inputClearer();
     return;
   }
 
   // Convert height to meters
-  let heightM = hVal / 100.0;
+  let heightM = hVal / 100;
 
   // Calculate BMI
   let bmi = wVal / (heightM * heightM);
+  bmi = bmi.toFixed(2);
 
-  // Round BMI to two decimal places
-  bmi = parseFloat(bmi).toFixed(2);
+  // Determine BMI category and image
+  let category = "";
+  let imgSrc = "";
 
-  let img;
-  let data = "";
-
-  // Determine the BMI category and corresponding image
   if (bmi < 18.5) {
-    data = "You Are Underweight";
-    img = "./assets/underweight.jpg";
+    category = "Underweight";
+    imgSrc = "./assets/underweight.jpg";
   } else if (bmi >= 18.5 && bmi < 25) {
-    data = "You Are Healthy";
-    img = "./assets/healthy.jpg";
+    category = "Healthy";
+    imgSrc = "./assets/healthy.jpg";
   } else if (bmi >= 25 && bmi < 30) {
-    data = "You Are Overweight";
-    img = "./assets/overweight.jpg";
-  } else if (bmi >= 30) {
-    data = "You Are Obese";
-    img = "./assets/obese.jpg";
+    category = "Overweight";
+    imgSrc = "./assets/overweight.jpg";
   } else {
-    data = "Please Enter a Valid Input";
+    category = "Obese";
+    imgSrc = "./assets/obese.jpg";
   }
 
-  // Display images and result
-  document.getElementById("body").setAttribute("src", img);
-  document.getElementById("res").innerHTML = ` ${data}.`;
+  // Display results
+  document.getElementById("body").src = imgSrc;
+  document.getElementById("res").innerText = `You are ${category}.`;
   document.getElementById("result").innerHTML = `Your BMI is <strong>${bmi}</strong>.`;
-  document.getElementById("info").setAttribute("class", "card show");
+  document.getElementById("info").classList.remove("hide");
 
-  // Extra conversions
-  const weightLbs = (wVal * 2.20462).toFixed(2); // kg → lbs
-  const heightFt = (hVal / 30.48).toFixed(2);    // cm → feet
+  // Extra info: weight in lbs, height in m & ft
+  const weightLbs = (wVal * 2.20462).toFixed(2);
+  const heightFt = (hVal / 30.48).toFixed(2);
 
-  // Show extra info
-  document.getElementById("weight-extra").innerHTML = `Weight: ${wVal} kg (${weightLbs} lbs)`;
-  document.getElementById("height-extra").innerHTML = `Height: ${hVal} cm (${heightM.toFixed(2)} m / ${heightFt} ft)`;
+  document.getElementById("weight-extra").innerText = `Weight: ${wVal} kg (${weightLbs} lbs)`;
+  document.getElementById("height-extra").innerText = `Height: ${hVal} cm (${heightM.toFixed(2)} m / ${heightFt} ft)`;
 });
 
